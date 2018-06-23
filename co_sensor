@@ -1,0 +1,33 @@
+// Senzor MQ-9
+// http://navody.arduino-shop.cz/navody-k-produktum/senzor-oxidu-uhelnateho-mq-9.html
+
+// nastavení propojovacího pinu
+#define pinA A0
+float sensor_volt;
+float RS_air;
+float R0;
+float sensorValue;
+
+void setup() {
+  // inicializace komunikace po sériové lince
+  // rychlostí 9600 baud
+  Serial.begin(9600);
+}
+
+void loop() {
+  // smyčka pro načtení 100 měření
+  sensorValue = 0;
+  for (int x = 0 ; x < 100 ; x++) {
+    sensorValue = sensorValue + analogRead(pinA);
+    delay(1);
+  }
+  sensorValue = sensorValue / 100.0;
+  sensor_volt = sensorValue / 1024 * 5.0;
+  RS_air = (5.0 - sensor_volt) / sensor_volt;
+  R0 = RS_air / 9.9;
+  
+  Serial.print("Konstanta R0: ");
+  Serial.println(R0);
+ 
+  delay(1000);
+}
