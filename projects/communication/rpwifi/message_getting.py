@@ -3,7 +3,6 @@ import sys
 
 BUFFER_SIZE = 128
 
-
 class Listener:
     '''Class which is handling getting of new messages'''
     def __init__(self, connection):
