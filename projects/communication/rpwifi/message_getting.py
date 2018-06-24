@@ -14,7 +14,7 @@ class Listener:
         '''Function which is listening and waiting for a message'''
         while True:
             data = self.connection.recv(BUFFER_SIZE)
-            if data:
+            if data and len(data) >= 1:
                 raw_data = data.decode('ascii')
                 print('R ========================== R')
                 print('TypeOfMessage-1|Temp|Hum|Pressure|In/Out')
