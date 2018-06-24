@@ -20,7 +20,6 @@ class Listener:
                 print('TypeOfMessage-1|Temp|Hum|Pressure|In/Out')
                 print('TypeOfMessage-3|Fire|Gas|CO|In/Out')
                 print(raw_data)
-                print('R ========================== R')
                 self.counter += 1
                 if self.counter % 50 == 0:
                     self.connection.sendall('1'.encode())
