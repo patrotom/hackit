@@ -64,14 +64,13 @@ class Handler:
 
     def print_info(self, message):
         values = message.split('|')
-        for i in range (0, len(values), 1):
-            values[i] = int(values[i])
+        # for i in range (0, len(values), 1):
+        #     values[i] = int(values[i])
         print('=================')
-        print('')
         print('Temperature:', values[1], '*C')
         print('Humidity:', values[2], '%')
         print('Pressure:', values[3], 'PA')
-
+        print('=================')
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
