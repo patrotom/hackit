@@ -54,7 +54,7 @@ class Handler:
             tmp = 'in'
         else:
             tmp = 'out'
-        print(message)
+        print('OK')
         return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
 
     # def print_info(self, message):
