@@ -7,22 +7,17 @@
 """
 
 def parse(t, d1, d2, d3):
-    return Packet(t, d1, d2, d3)
-
-class Packet:
     """ Packet format: type{Inform : 1, Urgent : 2, Control : 3}[4B] | ..."""
-    def __init__(self, t, d1, d2, d3):
-        self.type = t
-        if t == 1:
-            self = Inform(d1, d2, d3)
-        elif t == 2:
-            self == Control(d1)
-        elif t == 3:
-            self = Urgent(d1, d2, d3)
-        else:
-            print("Error: parsing packet of unknown type")
+    if t == 1:
+        return Inform(d1, d2, d3)
+    elif t == 2:
+        return Control(d1)
+    elif t == 3:
+        return Urgent(d1, d2, d3)
+    else:
+        print("Error: parsing packet of unknown type")
 
-class Inform(Packet):
+class Inform:
     """ type | Temperature(Int)[4B] | Humidity(Int)[4B] | Pressure(Int)[4B] """
     def __init__(self, d1, d2, d3):
         self.type = 1
@@ -30,7 +25,7 @@ class Inform(Packet):
         self.humid = d2
         self.press = d3
 
-class Urgent(Packet):
+class Urgent:
     """ type | fire(Bool)[4B] | flamable_gas(Bool)[4B] | CO(Bool)[4B] """
     def __init__(self, d1, d2, d3):
         self.type = 3
@@ -38,7 +33,7 @@ class Urgent(Packet):
         self.gas = d2
         self.co = d3
 
-class Control(Packet):
+class Control:
     """ type | cmd{ Request : 0, Open :  1, Close : 2 }[4B] """
     def __init__(self, d1):
         self.type = 2
