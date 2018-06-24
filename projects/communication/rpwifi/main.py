@@ -4,6 +4,7 @@ import socket
 import sys
 
 import message_getting as mg
+import control_unit as cu
 
 BUFFER_SIZE = 128
 
@@ -16,6 +17,7 @@ class Handler:
         self.listener = mg.Listener(self.connection)
         self.last_standard = []
         self.last_urgent = []
+        self.control_unit = cu.ControlUnit()
 
     def automata(self):
         '''Function which is implementing automata for evaluation of messages'''    
@@ -23,26 +25,23 @@ class Handler:
             try:
                 packet = self.listener.get_message()
                 if self.parse_message(packet):
-                    
                     pass
-
-
-
-
                 if packet == 'ERROR':
                     break
             except socket.error:
                 print('Slow WiFi connection...')
-    
+    # 1 - inner, 0 - outter
     def parse_message(self, message):
         input_values = message.split('|')
         for i in range (0, len(input_values), 1):
             input_values[i] = int(input_values[i])
         if input_values[0] == 1:
-            self.last_standard = input_values
+            final = [self.client_address, input_values[4], input_values[0], input_values[1], input_values[2], input_values[3]]
+            self.last_standard = final
             return True
         elif input_values[0] == 3:
-            self.last_urgent = input_values
+            final = [self.client_address, input_values[4], input_values[0], input_values[1], input_values[2], input_values[3]]
+            self.last_urgent = final
             return True
         return False
 

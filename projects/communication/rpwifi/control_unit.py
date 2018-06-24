@@ -21,7 +21,7 @@ class ControlUnit:
     def __init__(self):
         self.aim = DesiredAir()
         self.demo()
-    # 0 - IP, 1 - Inner/Outter, 2 - Message type, 3-5 - values
+
     def demo(self):
         self.stations = [st.Station("10.0.0.1", "room1", "in", ["temp", "humid", "pres", "servo", "gas", "co"]), st.Station("10.0.0.3", "garden", "out", ["temp", "humid"])]
 
