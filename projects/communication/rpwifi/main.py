@@ -47,14 +47,17 @@ class Handler:
             #print(input_values[0], 'GOOD')
             return 'ERROR'
         
-        for i in range (0, len(input_values), 1):
-            input_values[i] = int(input_values[i])
-        print('OK')
-        if input_values[4] == 1:
-            tmp = 'in'
-        else:
-            tmp = 'out'
-        
+        try:
+            for i in range (0, len(input_values), 1):
+                input_values[i] = int(input_values[i])
+            print('OK')
+            if input_values[4] == 1:
+                tmp = 'in'
+            else:
+                tmp = 'out'
+        except ValueError:
+            pass
+
         return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
 
     # def print_info(self, message):
