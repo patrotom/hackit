@@ -53,6 +53,8 @@ class Station:
         elif name == "servo":
             return self.sensors.servo
 
+
+
 class Sensors:
     """ Class for managing available sensors on Station. """
     
@@ -100,3 +102,12 @@ class Sensors:
             self.servo = True
         else:
             self.servo = False
+
+    def set_temp(self, temp):
+        self.temp_v = temp
+
+    def set_humid(self, humid):
+        self.humid_v = humid
+
+    def set_pres(self, pres):
+        self.pres_v = pres
