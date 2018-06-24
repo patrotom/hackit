@@ -46,7 +46,7 @@ class Handler:
         if len(input_values) <= 1 and len(input_values) >= 5:
             #print(input_values[0], 'GOOD')
             return 'ERROR'
-        
+        tmp = ''
         try:
             for i in range (0, len(input_values), 1):
                 input_values[i] = int(input_values[i])
