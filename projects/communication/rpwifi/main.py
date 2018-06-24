@@ -28,7 +28,7 @@ class Handler:
                 result = self.process_message(packet)
 
                 if result != None and result != 'ERROR':
-                    self.connection.sendall(result[1.encode()])
+                    self.connection.sendall(str(result[1]).encode())
                 print(result)
                 if result == None:
                     print('Normal results', packet)
