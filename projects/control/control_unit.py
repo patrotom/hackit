@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
-import station      # for classes Station, Sensors
-import parse        # for parse() and classes Inform, Control, Urgent
-import dfa          # for classes DFA, State
-import air_quality  # for get_response()
+import parse        as pa    # for parse() and classes Inform, Control, Urgent
+import station      as st    # for classes Station, Sensors
+import dfa          as df    # for classes DFA, State
 
 """ 
     control_unit.py 
@@ -20,34 +19,39 @@ class ControlUnit:
         current air conditions.
     """        
     def __init__(self):
-        self.aim = desired_air_status
-        demo()
+        self.aim = DesiredAir()
+        self.demo()
 
     def demo(self):
-        self.stations = [ Station("10.0.0.1", "room1", "in", ["fire", "temp", "humid", "pres", "servo"]), Station("10.0.0.2", "room2", "in", ["servo", "co", "gas", "temp"]), Station("10.0.0.3", "garden", "out", ["temp", "humid"])]
+        self.stations = [st.Station("10.0.0.1", "room1", "in", ["fire", "temp", "humid", "pres", "servo"]), st.Station("10.0.0.2", "room2", "in", ["servo", "co", "gas", "temp"]), st.Station("10.0.0.3", "garden", "out", ["temp", "humid"])]
 
     def process(self, ip, t, d1, d2, d3):
         """ -> String -> Int -> Int -> Int -> Int -> State
             - main function returns response for information packet creating response
             - if no action should be triggered returns None
         """
-        packet = parse(t, d1, d2, d3)
-        if packet.t != 1 and packet != 3:
+        packet = pa.parse(t, d1, d2, d3)
+        if packet.type != 1 and packet != 3:
             print("Error: ControlUnit received packet of wrong type.")
         
         station = None                                                      # find matching ip station
         for s in self.stations:
             if ip == s.ip:
                 station = s
-        if station:
+        if not station:
             print("Error: ControlUnit received packet from unknown IP.")
 
-        responce_sign = get_response(packet, self.aim, get_outside_temp())  # get response based on user preferences
-        if station.dfa.func(response_sign):                                 # if station state has changed
+        self.sensor_avail_filter(station, packet)
+
+        response_sign = get_response(packet, self.aim, self.get_outside_temp(), station) # get response based on user preferences
+        if response_sign is None:                                                # case of no respon
+            return None
+
+        if station.dfa.func(response_sign):                                     # if station state has changed
             if station.dfa.current.state == "open":
-                return open_window
+                return self.open_window
             else:
-                return close_window
+                return self.close_window
         return None
 
     def sensor_avail_filter(self, station, packet):
@@ -85,15 +89,96 @@ class ControlUnit:
         self.aim.humid = val
 
     def open_window(self):
-        return Control(1)
+        return pa.Control(1)
 
     def close_window(self):
-        return Control(2)
+        return pa.Control(2)
 
 
-class Desired_air_status:
+class DesiredAir:
     """ Representing desired status of temp and humidity. """
     def __init__(self):
         self.temp = 21
         self.humid = 42
 
+
+"""
+    air_quality
+        - function get_response serves for feeding the dfa with its sign input
+        based on the air conditions preferations
+"""
+
+def get_response(packet, desired_air,outside_temp, station):
+    """ -> Packet -> Int -> Sensor -> State 
+        - takes packet of Inform or Urgent type and chooses most urgent 
+        response in form of State that will be processed further by dfa on that
+        station
+    """
+   
+    """
+    if packet.type == 1:
+        station.has_sensor("temp").temp_v = packet.temp
+        station.has_sensor("humid").humid_v = packet.humid
+        station.has_sensor("pressure").pres_v = packet.pres
+
+    if packet.type == 3:
+        station.get_sensor("fire") = packet.fire
+        station.get_sensor("gas") = packet.gas
+        station.get_sensor("co") = packet.co
+    """
+    result = None
+    if packet.type == 3:
+        result = check_type3(packet.fire, packet.gas, packet.co)
+        if result is not None:
+            return result
+    elif packet.type == 1:
+        result = check_humid(packet.humid, desired_air.humid)
+        if result is not None:
+            return result
+        result = check_temp(packet.temp, desired_air.temp, outside_temp)
+        if result is not None:
+            return result
+    else:
+        return result
+
+def check_temp(temp, desired_temp, outside_temp):
+    """ -> Int -> State """
+    if temp is None or outside_temp is None:
+        return None
+
+    if temp > desired_temp + 2:
+        if outside_temp > temp:
+            return df.State("close", 2)
+        else:
+            return df.State("open", 2)
+    elif temp < desired_temp - 2:
+        if outside_temp > temp:
+            return df.State("open", 2)
+        else:
+            return df.State("close", 2)
+    else:
+        return None
+
+def check_humid(humid, desired_humid):
+    """ -> Int -> Int -> State """
+    if humid is None:
+        return None
+
+    if humid < desired_humid - 5:
+        return df.State("open", 3)
+    elif humid > desired_humid + 5:
+        return df.State("close", 3)
+    else:
+        return None
+
+def check_type3(fire, gas, co):
+    if fire or gas or co:
+        return df.State("open", 4)
+    else:
+        return None
+
+u = ControlUnit()
+print(u.process("10.0.0.3", 1, 20, 40, 10000))
+print(u.process("10.0.0.1", 1, 10, 40, 10000))
+print(u.process("10.0.0.1", 1, 5, 40, 10000))
+print(u.process("10.0.0.1", 1, 1, 90, 10000))

@@ -5,6 +5,8 @@
         - class for arduino station, specifying default configuration of the station.
 """
 
+import dfa as df
+
 class Station:
     """ Station contains info about stations relevant for the computation. """ 
     def __init__(self, ip, name, position, sensors):
@@ -13,8 +15,7 @@ class Station:
         self.name = name
         self.sensors = Sensors(sensors)
         self.position = position
-        self.dfa = DFA
-        
+        self.dfa = df.DFA()        
         
     def process(self, state):
         """ -> State -> Bool
@@ -51,7 +52,6 @@ class Station:
             return self.sensors.co
         elif name == "servo":
             return self.sensors.servo
-
 
 class Sensors:
     """ Class for managing available sensors on Station. """
