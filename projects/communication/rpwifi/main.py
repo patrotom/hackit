@@ -19,9 +19,12 @@ class Handler:
     def automata(self):
         '''Function which is implementing automata for evaluation of messages'''    
         while True:
-            packet = self.listener.get_message()
-            if packet == 'ERROR':
-                break
+            try:
+                packet = self.listener.get_message()
+                if packet == 'ERROR':
+                    break
+            except socket.error:
+                pass
 
 
 def main():
