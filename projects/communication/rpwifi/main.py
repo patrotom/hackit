@@ -25,13 +25,15 @@ class Handler:
             try:
                 packet = self.listener.get_message()
                 
-                result = self.process_message(packet)
+                if len(packet) > 1:
+                    self.print_info(packet)
+                # result = self.process_message(packet)
 
-                if result != None and result != 'ERROR':
-                    self.connection.sendall(str(result[1]).encode())
-                print(result)
-                if result == None:
-                    print('Normal results', packet)
+                # if result != None and result != 'ERROR':
+                #     self.connection.sendall(str(result[1]).encode())
+                # print(result)
+                # if result == None:
+                #     print('Normal results', packet)
 
                 if packet == 'ERROR':
                     break
@@ -40,35 +42,35 @@ class Handler:
                 #print('Slow WiFi connection...')
     
     # 1 - inner, 0 - outter
-    def process_message(self, message):
-        message = message.replace('\r\n', '')
-        input_values = message.split('|')
-        if len(input_values) <= 1 and len(input_values) >= 5:
-            #print(input_values[0], 'GOOD')
-            return 'ERROR'
-        tmp = ''
-        try:
-            for i in range (0, len(input_values), 1):
-                input_values[i] = int(input_values[i])
-            print('OK')
-            if input_values[4] == 1:
-                tmp = 'in'
-            else:
-                tmp = 'out'
-        except ValueError:
-            pass
+    # def process_message(self, message):
+    #     message = message.replace('\r\n', '')
+    #     input_values = message.split('|')
+    #     if len(input_values) <= 1 and len(input_values) >= 5:
+    #         #print(input_values[0], 'GOOD')
+    #         return 'ERROR'
+    #     tmp = ''
+    #     try:
+    #         for i in range (0, len(input_values), 1):
+    #             input_values[i] = int(input_values[i])
+    #         print('OK')
+    #         if input_values[4] == 1:
+    #             tmp = 'in'
+    #         else:
+    #             tmp = 'out'
+    #     except ValueError:
+    #         pass
 
-        return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
+    #     return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
 
-    # def print_info(self, message):
-    #     values = message.split('|')
-    #     for i in range (0, len(input_values), 1):
-    #         input_values[i] = int(input_values[i])
-    #     print('=================')
-    #     print('')
-    #     print('Temperature:', values[1], '*C')
-    #     print('Humidity:', values[2], '%')
-    #     print('Pressure:', values[3], 'PA')
+    def print_info(self, message):
+        values = message.split('|')
+        for i in range (0, len(values), 1):
+            values[i] = int(values[i])
+        print('=================')
+        print('')
+        print('Temperature:', values[1], '*C')
+        print('Humidity:', values[2], '%')
+        print('Pressure:', values[3], 'PA')
 
 
 def main():
