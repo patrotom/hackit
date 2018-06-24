@@ -35,15 +35,8 @@ class Handler:
         input_values = message.split('|')
         for i in range (0, len(input_values), 1):
             input_values[i] = int(input_values[i])
-        if input_values[0] == 1:
-            final = [self.client_address, input_values[4], input_values[0], input_values[1], input_values[2], input_values[3]]
-            self.last_standard = final
-            return True
-        elif input_values[0] == 3:
-            final = [self.client_address, input_values[4], input_values[0], input_values[1], input_values[2], input_values[3]]
-            self.last_urgent = final
-            return True
-        return False
+        
+        return self.control_unit.process(input_values[4], input_values[0], input_values[1], input_values[2], input_values[3])
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
