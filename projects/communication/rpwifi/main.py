@@ -42,7 +42,7 @@ class Handler:
     # 1 - inner, 0 - outter
     def process_message(self, message):
         input_values = message.split('|')
-        
+        print(input_values, '<-')
         if input_values[0] is not '1' and input_values[0] is not '3':
             #print(input_values[0], 'GOOD')
             return 'ERROR'
