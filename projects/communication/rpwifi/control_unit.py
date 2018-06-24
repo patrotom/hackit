@@ -173,10 +173,10 @@ def check_type3(fire, gas, co):
 
 '''
 u = ControlUnit()
-print(u.process("10.0.0.3", 1, 20, 40, 10000))
-print(u.process("10.0.0.1", 1, 10, 40, 10000))
-print(u.process("10.0.0.1", 1, 5, 40, 10000))
-print(u.process("10.0.0.1", 1, 1, 90, 10000))
-print(u.process("10.0.0.1", 1, 30, 10, 10000))
-print(u.process("10.0.0.1", 1, 1, 40, 10000))
+print(u.process(0, 1, 20, 40, 10000))
+print(u.process(1, 1, 10, 40, 10000))
+print(u.process(1, 1, 5, 40, 10000))
+print(u.process("in", 1, 1, 90, 10000))
+print(u.process("in", 1, 30, 10, 10000))
+print(u.process("in", 1, 1, 40, 10000))
 '''
