@@ -41,9 +41,9 @@ class Handler:
     
     # 1 - inner, 0 - outter
     def process_message(self, message):
+        message = message.replace('\r\n', '')
         input_values = message.split('|')
-        print(input_values, '<-')
-        if len(input_values) <= 1:
+        if len(input_values) <= 1 and len(input_values) >= 5:
             #print(input_values[0], 'GOOD')
             return 'ERROR'
         
