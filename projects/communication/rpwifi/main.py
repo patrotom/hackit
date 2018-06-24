@@ -41,12 +41,13 @@ class Handler:
     # 1 - inner, 0 - outter
     def process_message(self, message):
         input_values = message.split('|')
-        for i in range (0, len(input_values), 1):
-            input_values[i] = int(input_values[i])
         
         if input_values[0] is not 1 and input_values[3]:
             return 'ERROR'
-
+        
+        for i in range (0, len(input_values), 1):
+            input_values[i] = int(input_values[i])
+        
         if input_values[4] == 1:
             tmp = 'in'
         else:
