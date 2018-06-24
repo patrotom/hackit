@@ -24,19 +24,46 @@ class Handler:
         while True:
             try:
                 packet = self.listener.get_message()
-                if self.parse_message(packet):
-                    pass
+                
+                result = self.process_message(packet)
+
+                if result != None and result != 'ERROR':
+                    self.connection.sendall(result[1])
+
+                if result == None:
+                    print('Normal results', packet)
+
                 if packet == 'ERROR':
                     break
             except socket.error:
                 print('Slow WiFi connection...')
+    
     # 1 - inner, 0 - outter
-    def parse_message(self, message):
+    def process_message(self, message):
         input_values = message.split('|')
         for i in range (0, len(input_values), 1):
             input_values[i] = int(input_values[i])
         
-        return self.control_unit.process(input_values[4], input_values[0], input_values[1], input_values[2], input_values[3])
+        if input_values[0] is not 1 and input_values[3]:
+            return 'ERROR'
+
+        if input_values[4] == 1:
+            tmp = 'in'
+        else:
+            tmp = 'out'
+
+        return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
+
+    # def print_info(self, message):
+    #     values = message.split('|')
+    #     for i in range (0, len(input_values), 1):
+    #         input_values[i] = int(input_values[i])
+    #     print('=================')
+    #     print('')
+    #     print('Temperature:', values[1], '*C')
+    #     print('Humidity:', values[2], '%')
+    #     print('Pressure:', values[3], 'PA')
+
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

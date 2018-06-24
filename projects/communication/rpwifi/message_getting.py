@@ -15,8 +15,8 @@ class Listener:
             data = self.connection.recv(BUFFER_SIZE)
             if data:
                 raw_data = data.decode('ascii')
-                print('Received:', raw_data)
-                self.connection.sendall('Hello!\n'.encode())
+                # print('Received:', raw_data)
+                # self.connection.sendall('Hello!\n'.encode())
                 return raw_data
             else:
                 return 'ERROR'
