@@ -33,14 +33,16 @@ class ControlUnit:
         packet = pa.parse(t, d1, d2, d3)
         if packet.type != 1 and packet != 3:
             print("Error: ControlUnit received packet of wrong type.")
+            return None
         
         # find matching ip station
         station = None
         for s in self.stations:
             if ip == s.ip:
                 station = s
-        if not station:
+        if station is None:
             print("Error: ControlUnit received packet from unknown IP.")
+            return None
 
         self.sensor_avail_filter(station, packet)
 
