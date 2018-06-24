@@ -42,7 +42,7 @@ class Handler:
     def process_message(self, message):
         input_values = message.split('|')
         
-        if input_values[0] is not 1 and input_values[3]:
+        if input_values[0] is not 1 and input_values[0] is not 3:
             return 'ERROR'
         
         for i in range (0, len(input_values), 1):
