@@ -23,10 +23,10 @@ class Handler:
         '''Function which is implementing automata for evaluation of messages'''    
         while True:
             try:
-                # packet = self.listener.get_message()
+                packet = self.listener.get_message()
                 
-                if len(packet) > 1:
-                    self.print_info(packet)
+                #if len(packet) > 1:
+                #    self.print_info(packet)
                 # result = self.process_message(packet)
 
                 # if result != None and result != 'ERROR':
