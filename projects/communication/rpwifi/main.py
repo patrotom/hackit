@@ -43,6 +43,7 @@ class Handler:
         input_values = message.split('|')
         
         if input_values[0] is not 1 and input_values[0] is not 3:
+            print(input_values[0])
             return 'ERROR'
         
         for i in range (0, len(input_values), 1):
