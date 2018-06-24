@@ -54,9 +54,9 @@ class ControlUnit:
         # if station state has changed
         if station.dfa.func(response_sign):                                     
             if station.dfa.current.state == "open":
-                return self.open_window
+                return (2, 1, 0, 0)
             else:
-                return self.close_window
+                return (2, 2, 0, 0)
         return None
 
     def sensor_avail_filter(self, station, packet):
@@ -92,12 +92,6 @@ class ControlUnit:
 
     def set_desired_humid(self, val):
         self.aim.humid = val
-
-    def open_window(self):
-        return pa.Control(1)
-
-    def close_window(self):
-        return pa.Control(2)
 
 
 class DesiredAir:
@@ -175,7 +169,6 @@ def check_type3(fire, gas, co):
     else:
         return None
 
-'''
 u = ControlUnit()
 print(u.process("10.0.0.3", 1, 20, 40, 10000))
 print(u.process("10.0.0.1", 1, 10, 40, 10000))
@@ -183,4 +176,3 @@ print(u.process("10.0.0.1", 1, 5, 40, 10000))
 print(u.process("10.0.0.1", 1, 1, 90, 10000))
 print(u.process("10.0.0.1", 1, 30, 10, 10000))
 print(u.process("10.0.0.1", 1, 1, 40, 10000))
-'''
