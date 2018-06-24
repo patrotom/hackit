@@ -10,11 +10,10 @@ BUFFER_SIZE = 128
 
 class Handler:
     '''Main class which is evaluating incoming messages using finite state automata'''
-    def __init__(self, connection, client_address):
+    def __init__(self, sock):
         '''Constructor'''
-        self.connection = connection
-        self.client_address = client_address
-        self.listener = mg.Listener(self.connection)
+        self.sock = sock
+        self.listener = mg.Listener(self.sock)
 
     def automata(self):
         '''Function which is implementing automata for evaluation of messages'''    
@@ -25,13 +24,11 @@ class Handler:
 
 
 def main():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_address = ('192.168.10.1', 10000)
     print('Starting up on {}, port: {}'.format(*server_address))
     sock.bind(server_address)
-    sock.listen(1)
-    while True:
-        connection, client_address = sock.accept()
-        h = Handler(connection, client_address)
-        h.automata()
+    
+    h = Handler(sock)
+    h.automata()
 main()
