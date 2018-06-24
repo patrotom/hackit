@@ -21,10 +21,8 @@ class Listener:
                 # print('TypeOfMessage-3|Fire|Gas|CO|In/Out')
                 print(raw_data)
                 #self.counter += 1
-                if self.counter % 10 == 0:
-                    self.connection.sendall('1'.encode())
-                else:
-                    self.connection.sendall('2'.encode())
+                self.connection.sendall('12'.encode())
+                
                 return raw_data
             else:
                 return 'ERROR'
