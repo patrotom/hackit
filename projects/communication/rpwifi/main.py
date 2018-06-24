@@ -26,7 +26,7 @@ class Handler:
 
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('192.168.10.1', 10001)
+    server_address = ('192.168.10.1', 10000)
     print('Starting up on {}, port: {}'.format(*server_address))
     sock.bind(server_address)
     sock.listen(1)
