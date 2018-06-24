@@ -33,14 +33,16 @@ class ControlUnit:
         packet = pa.parse(t, d1, d2, d3)
         if packet.type != 1 and packet != 3:
             print("Error: ControlUnit received packet of wrong type.")
+            return None
         
         # find matching ip station
         station = None
         for s in self.stations:
             if ip == s.ip:
                 station = s
-        if not station:
+        if station is None:
             print("Error: ControlUnit received packet from unknown IP.")
+            return None
 
         self.sensor_avail_filter(station, packet)
 
@@ -171,10 +173,10 @@ def check_type3(fire, gas, co):
 
 '''
 u = ControlUnit()
-print(u.process("10.0.0.3", 1, 20, 40, 10000))
-print(u.process("10.0.0.1", 1, 10, 40, 10000))
-print(u.process("10.0.0.1", 1, 5, 40, 10000))
-print(u.process("10.0.0.1", 1, 1, 90, 10000))
-print(u.process("10.0.0.1", 1, 30, 10, 10000))
-print(u.process("10.0.0.1", 1, 1, 40, 10000))
+print(u.process(0, 1, 20, 40, 10000))
+print(u.process(1, 1, 10, 40, 10000))
+print(u.process(1, 1, 5, 40, 10000))
+print(u.process("in", 1, 1, 90, 10000))
+print(u.process("in", 1, 30, 10, 10000))
+print(u.process("in", 1, 1, 40, 10000))
 '''
