@@ -29,7 +29,7 @@ class Handler:
 
                 if result != None and result != 'ERROR':
                     self.connection.sendall(result[1])
-                #print(result)
+                print(result)
                 if result == None:
                     print('Normal results', packet)
 
