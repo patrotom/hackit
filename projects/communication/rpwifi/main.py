@@ -29,7 +29,7 @@ class Handler:
 
                 if result != None and result != 'ERROR':
                     self.connection.sendall(result[1])
-                print(result)
+                #print(result)
                 if result == None:
                     print('Normal results', packet)
 
@@ -43,7 +43,7 @@ class Handler:
     def process_message(self, message):
         input_values = message.split('|')
         
-        if input_values[0] is not 1 and input_values[0] is not 3:
+        if int(input_values[0]) is not 1 and int(input_values[0]) is not 3:
             #print(input_values[0], 'GOOD')
             return 'ERROR'
         
@@ -54,7 +54,7 @@ class Handler:
             tmp = 'in'
         else:
             tmp = 'out'
-        print(message)
+        #print(message)
         return self.control_unit.process(tmp, input_values[0], input_values[1], input_values[2], input_values[3])
 
     # def print_info(self, message):
